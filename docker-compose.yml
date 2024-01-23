@@ -1,0 +1,30 @@
+version: '3.8'
+
+services:
+    mysql:
+        image: mysql:8
+        container_name: mysql
+        environment:
+            - MYSQL_DATABASE=${DB_DATABASE}
+            - MYSQL_USER=${DB_USERNAME}
+            - MYSQL_PASSWORD=${DB_PASSWORD}
+            - MYSQL_ROOT_PASSWORD=root
+        ports:
+            - ${DB_PORT}:${DB_PORT}
+        networks:
+            - default_network
+
+    php-cli:
+        build:
+            dockerfile: Dockerfile
+        tty: true
+        container_name: php-cli
+        volumes:
+            - ./:/var/www
+        networks:
+            - default_network
+        extra_hosts:
+            - host.docker.internal:host-gateway
+
+networks:
+    default_network:
