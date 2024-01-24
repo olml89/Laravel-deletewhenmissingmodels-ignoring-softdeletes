@@ -3,19 +3,18 @@
 namespace Tests\Unit;
 
 use App\Jobs\Job;
-use App\Models\ExampleModel;
+use App\Models\NoSoftDeletableModel;
+use App\Models\SoftDeletableModel;
 use App\Services\Service;
+use Illuminate\Database\Eloquent\Model;
 use Mockery;
 use Mockery\MockInterface;
 use Tests\TestCase;
 
 final class JobTest extends TestCase
 {
-    public function testItShouldDiscardTheJobWhenModelIsDeleted(): void
+    private function setUpService(Job $job): void
     {
-        $exampleModel = ExampleModel::factory()->create();
-        $job = new Job($exampleModel);
-
         $this->app->instance(
             Service::class,
             Mockery::mock(
@@ -24,14 +23,33 @@ final class JobTest extends TestCase
                     $mock
                         ->shouldReceive('execute')
                         ->withArgs(
-                            fn (ExampleModel $exampleModel): bool => $exampleModel->getKey() === $job->exampleModel->getKey()
+                            fn (Model $model): bool => $model->getKey() === $job->model->getKey()
                         )
                         ->never();
                 }
             )
         );
+    }
 
-        $exampleModel->delete();
+    public function testItShouldDiscardJobWithDeleteWhenMissingModelsWhenModelIsDeleted(): void
+    {
+        $noSoftDeletableModel = NoSoftDeletableModel::factory()->create();
+        $job = new Job($noSoftDeletableModel);
+
+        $this->setUpService($job);
+
+        $noSoftDeletableModel->delete();
+        dispatch($job);
+    }
+
+    public function testItShouldDiscardJobWithDeleteWhenMissingModelsWhenModelIsSoftDeleted(): void
+    {
+        $softDeletableModel = SoftDeletableModel::factory()->create();
+        $job = new Job($softDeletableModel);
+
+        $this->setUpService($job);
+
+        $softDeletableModel->delete();
         dispatch($job);
     }
 }

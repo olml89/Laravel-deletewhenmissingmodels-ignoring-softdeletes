@@ -2,9 +2,9 @@
 
 namespace App\Services;
 
-use App\Models\ExampleModel;
+use Illuminate\Database\Eloquent\Model;
 
 interface Service
 {
-    public function execute(ExampleModel $exampleModel): void;
+    public function execute(Model $model): void;
 }

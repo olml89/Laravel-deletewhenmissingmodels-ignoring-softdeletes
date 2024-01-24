@@ -7,11 +7,11 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
- * App\Models\ExampleModel
+ * App\Models\SoftDeletableModel
  *
- * @method static \Database\Factories\ExampleModelFactory factory($count = null, $state = [])
+ * @method static \Database\Factories\SoftDeletableModelFactory factory($count = null, $state = [])
  */
-class ExampleModel extends Model
+class SoftDeletableModel extends Model
 {
     use HasFactory, SoftDeletes;
 }

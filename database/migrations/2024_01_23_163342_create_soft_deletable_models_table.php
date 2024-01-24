@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    private const TABLE = 'example_models';
+    private const TABLE = 'soft_deletable_models';
 
     /**
      * Run the migrations.
@@ -25,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('example_model');
+        Schema::dropIfExists(self::TABLE);
     }
 };

@@ -2,10 +2,10 @@
 
 namespace App\Jobs;
 
-use App\Models\ExampleModel;
 use App\Services\Service;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
@@ -17,13 +17,13 @@ final class Job implements ShouldQueue
     public bool $deleteWhenMissingModels = true;
 
     public function __construct(
-        public readonly ExampleModel $exampleModel,
+        public readonly Model $model,
     )
     {
     }
 
     public function handle(Service $service): void
     {
-        $service->execute($this->exampleModel);
+        $service->execute($this->model);
     }
 }
